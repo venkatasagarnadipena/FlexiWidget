@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,7 +16,109 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FlexiWidget">
-        <!-- Application logic will reside in Widgets and Workers. No default Activity needed for now. -->
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FlexiWidget">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".widget.ConnectivityReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".widget.AdminReceiver"
+            android:exported="true"
+            android:label="FlexiWidget Lock Admin"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_receiver" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- WiFi Widgets -->
+        <receiver android:name=".widget.WifiWidgetSquareReceiver" android:exported="true" android:label="Wifi Square">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/wifi_square_info" />
+        </receiver>
+        <receiver android:name=".widget.WifiWidgetRoundReceiver" android:exported="true" android:label="Wifi Round">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/wifi_round_info" />
+        </receiver>
+        <receiver android:name=".widget.WifiWidgetSquareLabelReceiver" android:exported="true" android:label="Wifi Sq Label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/wifi_square_label_info" />
+        </receiver>
+        <receiver android:name=".widget.WifiWidgetRoundLabelReceiver" android:exported="true" android:label="Wifi Rd Label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/wifi_round_label_info" />
+        </receiver>
+
+        <!-- Mobile Data Widgets -->
+        <receiver android:name=".widget.MobileDataWidgetSquareReceiver" android:exported="true" android:label="Data Square">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/data_square_info" />
+        </receiver>
+        <receiver android:name=".widget.MobileDataWidgetRoundReceiver" android:exported="true" android:label="Data Round">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/data_round_info" />
+        </receiver>
+        <receiver android:name=".widget.MobileDataWidgetSquareLabelReceiver" android:exported="true" android:label="Data Sq Label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/data_square_label_info" />
+        </receiver>
+        <receiver android:name=".widget.MobileDataWidgetRoundLabelReceiver" android:exported="true" android:label="Data Rd Label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/data_round_label_info" />
+        </receiver>
+
+        <!-- Airplane Mode Widgets -->
+        <receiver android:name=".widget.AirplaneModeWidgetSquareReceiver" android:exported="true" android:label="Flight Square">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/airplane_square_info" />
+        </receiver>
+        <receiver android:name=".widget.AirplaneModeWidgetRoundReceiver" android:exported="true" android:label="Flight Round">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/airplane_round_info" />
+        </receiver>
+        <receiver android:name=".widget.AirplaneModeWidgetSquareLabelReceiver" android:exported="true" android:label="Flight Sq Label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/airplane_square_label_info" />
+        </receiver>
+        <receiver android:name=".widget.AirplaneModeWidgetRoundLabelReceiver" android:exported="true" android:label="Flight Rd Label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/airplane_round_label_info" />
+        </receiver>
+
+        <!-- Lock Widgets -->
+        <receiver android:name=".widget.LockWidgetSquareReceiver" android:exported="true" android:label="Lock Square">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/lock_square_info" />
+        </receiver>
+        <receiver android:name=".widget.LockWidgetRoundReceiver" android:exported="true" android:label="Lock Round">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/lock_round_info" />
+        </receiver>
+        <receiver android:name=".widget.LockWidgetSquareLabelReceiver" android:exported="true" android:label="Lock Sq Label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/lock_square_label_info" />
+        </receiver>
+        <receiver android:name=".widget.LockWidgetRoundLabelReceiver" android:exported="true" android:label="Lock Rd Label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/lock_round_label_info" />
+        </receiver>
+
     </application>
 
 </manifest>
