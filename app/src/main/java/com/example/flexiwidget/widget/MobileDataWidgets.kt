@@ -18,13 +18,7 @@ import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
-import androidx.glance.layout.Alignment
-import androidx.glance.layout.Column
-import androidx.glance.layout.Spacer
-import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.height
-import androidx.glance.layout.padding
-import androidx.glance.layout.size
+import androidx.glance.layout.*
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -37,8 +31,6 @@ abstract class MobileDataWidgetBase(
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        
-        // Data state requires handling potential security exceptions if permissions are missing
         val isEnabled = try {
             telephonyManager.isDataEnabled
         } catch (e: Exception) {
@@ -66,32 +58,35 @@ abstract class MobileDataWidgetBase(
             GlanceTheme.colors.onSurfaceVariant
         }
 
-        Column(
+        Box(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .padding(8.dp)
                 .background(backgroundProvider)
                 .cornerRadius(if (isRound) 50.dp else 16.dp)
                 .clickable(actionRunCallback<MobileDataToggleAction>()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalAlignment = Alignment.CenterVertically
+            contentAlignment = Alignment.Center
         ) {
-            Image(
-                provider = ImageProvider(R.drawable.ic_mobile_data),
-                contentDescription = "Mobile Data Toggle",
-                modifier = GlanceModifier.size(if (hasLabel) 28.dp else 36.dp),
-                colorFilter = ColorFilter.tint(contentColorProvider)
-            )
-            if (hasLabel) {
-                Spacer(modifier = GlanceModifier.height(0.dp))
-                Text(
-                    text = "Data",
-                    style = TextStyle(
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = contentColorProvider
-                    )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    provider = ImageProvider(R.drawable.ic_mobile_data),
+                    contentDescription = "Mobile Data Toggle",
+                    modifier = GlanceModifier.size(if (hasLabel) 28.dp else 36.dp),
+                    colorFilter = ColorFilter.tint(contentColorProvider)
                 )
+                if (hasLabel) {
+                    Spacer(modifier = GlanceModifier.height(0.dp))
+                    Text(
+                        text = "Data",
+                        style = TextStyle(
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = contentColorProvider
+                        )
+                    )
+                }
             }
         }
     }

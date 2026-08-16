@@ -8,6 +8,8 @@ import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
 
+import androidx.glance.appwidget.updateAll
+
 class MobileDataToggleAction : ActionCallback {
     override suspend fun onAction(context: Context, glanceId: GlanceId, parameters: ActionParameters) {
         val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -20,6 +22,11 @@ class MobileDataToggleAction : ActionCallback {
             }
         }
         context.startActivity(intent)
+
+        MobileDataWidgetSquare().updateAll(context)
+        MobileDataWidgetRound().updateAll(context)
+        MobileDataWidgetSquareLabel().updateAll(context)
+        MobileDataWidgetRoundLabel().updateAll(context)
     }
 }
 
@@ -35,5 +42,10 @@ class AirplaneModeToggleAction : ActionCallback {
             }
         }
         context.startActivity(intent)
+
+        AirplaneModeWidgetSquare().updateAll(context)
+        AirplaneModeWidgetRound().updateAll(context)
+        AirplaneModeWidgetSquareLabel().updateAll(context)
+        AirplaneModeWidgetRoundLabel().updateAll(context)
     }
 }

@@ -7,6 +7,7 @@ import android.provider.Settings
 import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
+import androidx.glance.appwidget.updateAll
 
 class WifiToggleAction : ActionCallback {
     override suspend fun onAction(context: Context, glanceId: GlanceId, parameters: ActionParameters) {
@@ -20,5 +21,11 @@ class WifiToggleAction : ActionCallback {
             }
         }
         context.startActivity(intent)
+        
+        // Immediate update request
+        WifiWidgetSquare().updateAll(context)
+        WifiWidgetRound().updateAll(context)
+        WifiWidgetSquareLabel().updateAll(context)
+        WifiWidgetRoundLabel().updateAll(context)
     }
 }

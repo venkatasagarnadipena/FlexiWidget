@@ -15,6 +15,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -199,7 +200,95 @@ fun WidgetGridScreen(context: Context, onBack: () -> Unit) {
             item { MiniWidgetPreview("", R.drawable.ic_lock, true) { pinWidget(context, LockWidgetRoundReceiver::class.java) } }
             item { MiniWidgetPreview("Lock", R.drawable.ic_lock, false) { pinWidget(context, LockWidgetSquareLabelReceiver::class.java) } }
             item { MiniWidgetPreview("Lock", R.drawable.ic_lock, true) { pinWidget(context, LockWidgetRoundLabelReceiver::class.java) } }
+
+            // Volume Section Header
+            item(span = { GridItemSpan(4) }) {
+                Text(
+                    text = "Volume Control",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(top = 24.dp, bottom = 16.dp)
+                )
+            }
+
+            // Volume Row
+            item(span = { GridItemSpan(2) }) {
+                VolumeWidgetPreview("1x2", isVertical = true) {
+                    pinWidget(context, VolumeWidget1x2Receiver::class.java)
+                }
+            }
+            item(span = { GridItemSpan(2) }) {
+                VolumeWidgetPreview("2x1", isVertical = false) {
+                    pinWidget(context, VolumeWidget2x1Receiver::class.java)
+                }
+            }
         }
+    }
+}
+
+@Composable
+fun VolumeWidgetPreview(name: String, isVertical: Boolean, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .then(
+                    if (isVertical) Modifier.size(width = 64.dp, height = 120.dp)
+                    else Modifier.size(width = 120.dp, height = 64.dp)
+                )
+                .clip(RoundedCornerShape(32.dp))
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .clickable { onClick() },
+            contentAlignment = Alignment.Center
+        ) {
+            // Background Fill (simulated 75%)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .then(
+                        if (isVertical) Modifier.fillMaxHeight(0.75f).align(Alignment.BottomCenter)
+                        else Modifier.fillMaxWidth(0.75f).align(Alignment.CenterStart)
+                    )
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.5f))
+            )
+
+            if (isVertical) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)
+                ) {
+                    Icon(painterResource(R.drawable.ic_add), null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(20.dp))
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Volume", fontSize = 10.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text("75%", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    }
+                    Icon(painterResource(R.drawable.ic_remove), null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(20.dp))
+                }
+            } else {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp)
+                ) {
+                    Icon(painterResource(R.drawable.ic_remove), null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(20.dp))
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Volume", fontSize = 10.sp, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text("75%", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    }
+                    Icon(painterResource(R.drawable.ic_add), null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(20.dp))
+                }
+            }
+        }
+        Text(
+            text = name,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 4.dp)
+        )
     }
 }
 
