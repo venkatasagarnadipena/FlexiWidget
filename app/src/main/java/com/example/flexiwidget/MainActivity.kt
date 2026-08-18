@@ -223,6 +223,11 @@ fun WidgetGridScreen(context: Context, onBack: () -> Unit) {
                     pinWidget(context, VolumeWidget2x1Receiver::class.java)
                 }
             }
+            item(span = { GridItemSpan(2) }) {
+                VolumeWidgetPreview("1x4", isVertical = true) {
+                    pinWidget(context, VolumeWidget1x4Receiver::class.java)
+                }
+            }
         }
     }
 }
